@@ -1,0 +1,28 @@
+{
+  "name": "world-capitals",
+  "version": "1.0.0",
+  "description": "Alexa world capitals trivia game. Can you get them right?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreiconstantinescu/world-capitals.git"
+  },
+  "keywords": [
+    "Alexa",
+    "trivia",
+    "skill",
+    "nodejs"
+  ],
+  "author": "Andrei Constantinescu <andrei@constantinescu.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreiconstantinescu/world-capitals/issues"
+  },
+  "homepage": "https://github.com/andreiconstantinescu/world-capitals#readme",
+  "dependencies": {
+    "alexa-sdk": "^1.0.6"
+  }
+}
