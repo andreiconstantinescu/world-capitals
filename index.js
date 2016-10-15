@@ -10,3 +10,4 @@ exports.handler = (event, context, callback) => {
   alexa.registerHandlers(handlers)
   alexa.execute()
 }
+console.log(handlers.LaunchRequest);
