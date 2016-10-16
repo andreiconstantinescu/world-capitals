@@ -2,7 +2,6 @@
 
 const Alexa = require('alexa-sdk')
 const skillStates = require('../constants/states.js')
-const formQuestion = require('../utils').questionUtils.formQuestion
 const assign = require('lodash/assign')
 
 const checkAnswer = (correctAnswer, userAnswer) => userAnswer === correctAnswer
@@ -15,23 +14,7 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
     })
     console.log('in game')
     console.log(this)
-    this.emitWithState('AskQuestion')
-  },
-
-  AskQuestion (prompt) {
-    console.log('in askQuestion')
-    const questions = this.attributes.currentGame.items
-    const currentQuestionNumber = this.attributes.currentGame.currentQuestion
-    console.log(`[AskQuestion]: ${currentQuestionNumber}`)
-    console.log(`[AskQuestion]: ${questions[currentQuestionNumber].country}`)
-    const toSay = `${prompt || ''} ${formQuestion(questions[currentQuestionNumber].country)}`
-    const reprompt = 'Just say the capital to check, pass or i don\'t know to move on to the next one'
-
-    if (currentQuestionNumber >= this.attributes.currentGame.roundSize) {
-      this.emitWithState('GameOver')
-    } else {
-      this.emit(':ask', toSay, reprompt)
-    }
+    this.emit('AskQuestion')
   },
 
   AnswerIntent () {
@@ -45,7 +28,7 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
     this.attributes.currentGame.currentQuestion++
     this.attributes.currentGame.score += gotThePoint ? 1 : 0
     console.log(`[AnswerIntent]: gotThePoint? ${gotThePoint}`);
-    this.emitWithState('AskQuestion', prompt)
+    this.emit('AskQuestion', prompt)
   },
 
   PassIntent () {
@@ -53,16 +36,15 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
     const toSay = `The correct answer was ${this.attributes.currentGame.items[currentQuestionNumber].capital}`
     this.attributes.currentGame.currentQuestion++
 
-    this.emitWithState('AskQuestion', toSay)
+    this.emit('AskQuestion', toSay)
   },
 
-  GameOver () {
-    const userScore = this.attributes.currentGame.score
-    const roundSize = this.attributes.currentGame.roundSize
-    const toSay = `${userScore < roundSize - 2 ? 'Good job' : 'Congratulations'}, your score is ${userScore}! Do you want to play again?`
-    const reprompt = 'Say yes to play again or no to quit!'
+  ['AMAZON.YesIntent'] () {
+    this.emit('NewSession')
+  },
 
-    this.emit(':ask', toSay, reprompt)
+  ['AMAZON.NoIntent'] () {
+    this.emit(':tell', 'Alright, see you next time!')
   },
 
   Unhandled () {
