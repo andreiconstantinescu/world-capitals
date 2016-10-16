@@ -2,6 +2,7 @@
 
 const Alexa = require('alexa-sdk')
 const skillStates = require('../constants/states.js')
+const roundInfo = require('../constants/gameRound.js')
 const utils = require('../utils')
 
 const startGameHandler = Alexa.CreateStateHandler(skillStates.STARTMODE, {
@@ -12,8 +13,8 @@ const startGameHandler = Alexa.CreateStateHandler(skillStates.STARTMODE, {
 
   ['AMAZON.YesIntent'] () {
     this.attributes.currentGame = {
-      items: utils.questionUtils.getCurrentGameQuestions(10),
-      score: 0
+      items: utils.questionUtils.getCurrentGameQuestions(roundInfo.roundSize),
+      roundSize: roundInfo.roundSize
     }
     this.handler.state = skillStates.PLAYMODE
     this.emitWithState('NewGame')
