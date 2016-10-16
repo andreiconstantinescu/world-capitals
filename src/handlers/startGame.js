@@ -17,7 +17,7 @@ const startGameHandler = Alexa.CreateStateHandler(skillStates.STARTMODE, {
       roundSize: roundInfo.roundSize
     }
     this.handler.state = skillStates.PLAYMODE
-    this.emitWithState('NewGame')
+    this.emitWithState('NewSession')
   },
 
   ['AMAZON.NoIntent'] () {

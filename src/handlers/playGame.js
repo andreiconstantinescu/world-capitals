@@ -8,7 +8,7 @@ const assign = require('lodash/assign')
 const checkAnswer = (correctAnswer, userAnswer) => userAnswer === correctAnswer
 
 const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
-  NewGame () {
+  NewSession () {
     assign(this.attributes.currentGame, {
       score: 0,
       currentQuestion: 0
