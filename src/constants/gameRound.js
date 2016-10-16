@@ -1,6 +1,6 @@
 'use strict'
 
-const roundSize = 10
+const roundSize = 5
 
 module.exports = {
   roundSize
