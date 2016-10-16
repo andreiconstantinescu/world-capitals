@@ -2,7 +2,7 @@
 
 const Alexa = require('alexa-sdk')
 const skillStates = require('../constants/states.js')
-const formQuestion = require('../utils').formQuestion
+const formQuestion = require('../utils').questionUtils.formQuestion
 const assign = require('lodash/assign')
 
 const checkAnswer = (correctAnswer, userAnswer) => userAnswer === correctAnswer
@@ -13,41 +13,47 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
       score: 0,
       currentQuestion: 0
     })
-    this.emit('AskQuestion')
+    console.log('in game')
+    console.log(this)
+    this.emitWithState('AskQuestion')
   },
 
   AskQuestion (prompt) {
+    console.log('in askQuestion')
     const questions = this.attributes.currentGame.items
     const currentQuestionNumber = this.attributes.currentGame.currentQuestion
-    const toSay = `${prompt || ''} ${formQuestion(questions[currentQuestionNumber])}`
+    console.log(`[AskQuestion]: ${currentQuestionNumber}`)
+    console.log(`[AskQuestion]: ${questions[currentQuestionNumber].country}`)
+    const toSay = `${prompt || ''} ${formQuestion(questions[currentQuestionNumber].country)}`
     const reprompt = 'Just say the capital to check, pass or i don\'t know to move on to the next one'
 
     if (currentQuestionNumber >= this.attributes.currentGame.roundSize) {
-      this.emit('GameOver')
+      this.emitWithState('GameOver')
     } else {
       this.emit(':ask', toSay, reprompt)
     }
   },
 
-  AnswerIntent () {
+  AnswerIntent_PLAYMODE () {
+    console.log(`[AnswerIntent]: ${this.event.request.intent.slots.capital}`)
     const currentQuestionNumber = this.attributes.currentGame.currentQuestion
     const correctAnswer = this.attributes.currentGame.items[currentQuestionNumber].capital.toLowerCase()
-    const userAnswer = this.event.request.intent.slots.capital.value.toLowerCase()
+    const userAnswer = this.event.request.intent.slots.Capital.value.toLowerCase()
     const gotThePoint = checkAnswer(correctAnswer, userAnswer)
     const prompt = `${gotThePoint ? 'Correct!' : 'Unfortunately, that is not the correct answer'}. Try to answer the next one!`
 
     this.atrributes.currentGame.currentQuestion++
     this.atrributes.currentGame.score += gotThePoint ? 1 : 0
 
-    this.emit('AskQuestion', prompt)
+    this.emitWithState('AskQuestion', prompt)
   },
 
   PassIntent () {
     const currentQuestionNumber = this.attributes.currentGame.currentQuestion
-    const toSay = `The correct answer was ${this.attributes.currentGame[currentQuestionNumber].capital.value}`
+    const toSay = `The correct answer was ${this.attributes.currentGame[currentQuestionNumber].Capital.value}`
     this.attributes.currentGame.currentQuestion++
 
-    this.emit('AskQuestion', toSay)
+    this.emitWithState('AskQuestion', toSay)
   },
 
   GameOver () {
@@ -60,8 +66,9 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
   },
 
   Unhandled () {
-    const message = 'Say yes to continue, no to end the game or help to find out more information.'
-    this.emit(':ask', message, message)
+    const message = 'Say yes to start a new game, no to end the game or help to find out more information.'
+    this.handler.state = skillStates.STARTMODE
+    this.emitWithState(':ask', message, message)
   }
 })
 
