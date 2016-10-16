@@ -4,7 +4,7 @@ const Alexa = require('alexa-sdk')
 const skillStates = require('../constants/states.js')
 
 const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
-  NewSession () {
+  NewGame () {
     this.handler.state = null
     // this.emitWithState('NewSession')
     console.log('in game');

@@ -9,10 +9,9 @@ const newSessionHandlers = {
       this.attributes.gamesPlayed = 0
     }
     this.handler.state = constants.skillStates.STARTMODE
-    console.log(this.emit);
     this.emit(':ask',
       `Welcome to  ${constants.appInfo.SKILL_NAME}! Do you want to play?`,
-      'Say yes to begin the fun or no to quit.')
+      'Say yes to begin the fun, no to quit or help to find out more.')
   }
 }
 

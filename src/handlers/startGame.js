@@ -16,19 +16,15 @@ const startGameHandler = Alexa.CreateStateHandler(skillStates.STARTMODE, {
       score: 0
     }
     this.handler.state = skillStates.PLAYMODE
-    this.emitWithState('NewSession')
+    this.emitWithState('NewGame')
   },
 
   ['AMAZON.NoIntent'] () {
     this.emit(':tell', 'Alright, see you next time!')
   },
 
-  SessionEndedRequest () {
-    this.emit(':tell', 'Bye!')
-  },
-
   Unhandled () {
-    const message = 'Say yes to continue, or no to end the game.'
+    const message = 'Say yes to continue, no to end the game or help to find out more information.'
     this.emit(':ask', message, message)
   }
 })
