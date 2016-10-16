@@ -34,7 +34,7 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
     }
   },
 
-  AnswerIntent_PLAYMODE () {
+  AnswerIntent () {
     console.log(`[AnswerIntent]: ${this.event.request.intent.slots.Capital.value}`)
     const currentQuestionNumber = this.attributes.currentGame.currentQuestion
     const correctAnswer = this.attributes.currentGame.items[currentQuestionNumber].capital.toLowerCase()
@@ -48,7 +48,7 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
     this.emitWithState('AskQuestion', prompt)
   },
 
-  PassIntent_PLAYMODE () {
+  PassIntent () {
     const currentQuestionNumber = this.attributes.currentGame.currentQuestion
     const toSay = `The correct answer was ${this.attributes.currentGame.items[currentQuestionNumber].capital}`
     this.attributes.currentGame.currentQuestion++
