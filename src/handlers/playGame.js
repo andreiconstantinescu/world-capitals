@@ -35,16 +35,16 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
   },
 
   AnswerIntent_PLAYMODE () {
-    console.log(`[AnswerIntent]: ${this.event.request.intent.slots.capital}`)
+    console.log(`[AnswerIntent]: ${this.event.request.intent.slots.Capital.value}`)
     const currentQuestionNumber = this.attributes.currentGame.currentQuestion
     const correctAnswer = this.attributes.currentGame.items[currentQuestionNumber].capital.toLowerCase()
     const userAnswer = this.event.request.intent.slots.Capital.value.toLowerCase()
     const gotThePoint = checkAnswer(correctAnswer, userAnswer)
     const prompt = `${gotThePoint ? 'Correct!' : 'Unfortunately, that is not the correct answer'}. Try to answer the next one!`
 
-    this.atrributes.currentGame.currentQuestion++
-    this.atrributes.currentGame.score += gotThePoint ? 1 : 0
-
+    this.attributes.currentGame.currentQuestion++
+    this.attributes.currentGame.score += gotThePoint ? 1 : 0
+    console.log(`[AnswerIntent]: gotThePoint? ${gotThePoint}`);
     this.emitWithState('AskQuestion', prompt)
   },
 
@@ -68,7 +68,7 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
   Unhandled () {
     const message = 'Say yes to start a new game, no to end the game or help to find out more information.'
     this.handler.state = skillStates.STARTMODE
-    this.emitWithState(':ask', message, message)
+    this.emit(':ask', message, message)
   }
 })
 
