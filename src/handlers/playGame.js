@@ -27,7 +27,7 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
 
     this.attributes.currentGame.currentQuestion++
     this.attributes.currentGame.score += gotThePoint ? 1 : 0
-    console.log(`[AnswerIntent]: gotThePoint? ${gotThePoint}`);
+    console.log(`[AnswerIntent]: gotThePoint? ${gotThePoint}`)
     this.emit('AskQuestion', prompt)
   },
 
@@ -37,14 +37,6 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
     this.attributes.currentGame.currentQuestion++
 
     this.emit('AskQuestion', toSay)
-  },
-
-  ['AMAZON.YesIntent'] () {
-    this.emit('NewSession')
-  },
-
-  ['AMAZON.NoIntent'] () {
-    this.emit(':tell', 'Alright, see you next time!')
   },
 
   Unhandled () {
