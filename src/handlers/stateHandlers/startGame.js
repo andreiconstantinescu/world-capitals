@@ -21,6 +21,14 @@ const startGameHandler = Alexa.CreateStateHandler(skillStates.STARTMODE, {
     generateGame.bind(this)()
   },
 
+  ['AMAZON.NoIntent'] () {
+    this.emit('AMAZON.NoIntent')
+  },
+
+  ['AMAZON.HelpIntent'] () {
+    this.emit('AMAZON.HelpIntent')
+  },
+
   NewIntent () {
     generateGame.bind(this)()
   },
