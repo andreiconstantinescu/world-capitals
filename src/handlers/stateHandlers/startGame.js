@@ -12,7 +12,6 @@ function generateGame () {
     roundSize: roundInfo.roundSize
   }
   this.handler.state = skillStates.PLAYMODE
-  console.log('emitwithstate');
   this.emitWithState('NewSession')
 }
 
