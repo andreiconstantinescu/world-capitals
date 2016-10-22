@@ -1,10 +1,13 @@
 'use strict'
 
 const Alexa = require('alexa-sdk')
-const skillStates = require('../constants/states.js')
+const skillStates = require('../../constants/states.js')
+const responses = require('../../../assets/responses.js')
 const assign = require('lodash/assign')
+const sample = require('lodash/sample')
 
 const checkAnswer = (correctAnswer, userAnswer) => userAnswer === correctAnswer
+const getPrompt = (gotThePoint, capital) => gotThePoint ? sample(responses.positive) : `${sample(responses.negative)}, ${capital} was the answer`
 
 const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
   NewSession () {
@@ -23,7 +26,7 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
     const correctAnswer = this.attributes.currentGame.items[currentQuestionNumber].capital.toLowerCase()
     const userAnswer = this.event.request.intent.slots.Capital.value.toLowerCase()
     const gotThePoint = checkAnswer(correctAnswer, userAnswer)
-    const prompt = `${gotThePoint ? 'Correct!' : 'Unfortunately, that is not the correct answer'}. Try to answer the next one!`
+    const prompt = `${getPrompt(gotThePoint, correctAnswer)}. Try to answer the next one!`
 
     this.attributes.currentGame.currentQuestion++
     this.attributes.currentGame.score += gotThePoint ? 1 : 0
@@ -45,21 +48,15 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
 
   NewIntent () {
     this.handler.state = skillStates.STARTMODE
-    this.emitWithState('AMAZON.YesIntent')
+    this.emitWithState('NewIntent')
   },
 
   EndIntent () {
-    this.handler.state = skillStates.STARTMODE
-    this.emitWithState('AMAZON.NoIntent')
-  },
-
-  ['AMAZON.HelpIntent'] () {
-    const message = 'Say repeat to repeat, new to start a new game or end to end the game.'
-    this.emit(':ask', message, message)
+    this.emit('AMAZON.NoIntent')
   },
 
   Unhandled () {
-    this.emitWithState('AMAZON.HelpIntent')
+    this.emit('AMAZON.HelpIntent')
   }
 })
 

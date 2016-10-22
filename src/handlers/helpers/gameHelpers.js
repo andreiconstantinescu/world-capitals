@@ -1,6 +1,7 @@
 'use strict'
 
-const formQuestion = require('../utils').questionUtils.formQuestion
+const formQuestion = require('../../utils').questionUtils.formQuestion
+const states = require('../../constants/states.js')
 
 const GameHelpers = {
   AskQuestion (prompt) {
@@ -14,7 +15,7 @@ const GameHelpers = {
     const reprompt = "Just say the capital to check, pass or i don't know to move on to the next one"
 
     if (currentQuestionNumber >= this.attributes.currentGame.roundSize) {
-      this.emitWithState('GameOver')
+      this.emit('GameOver')
     } else {
       this.emit(':ask', toSay, reprompt)
     }
@@ -26,6 +27,7 @@ const GameHelpers = {
     const toSay = `${userScore < roundSize - 2 ? 'Good job' : 'Congratulations'}, your score is ${userScore}! Do you want to play again?`
     const reprompt = 'Say yes to play again or no to quit!'
 
+    this.handler.state = states.STARTMODE
     this.emit(':ask', toSay, reprompt)
   }
 }
