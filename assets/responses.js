@@ -16,7 +16,7 @@ const negative = [
 ]
 
 const helpful = {
-  [states.STARTMODE]: 'Say new for a new game, no to end the game or help to find out more information.',
+  [states.STARTMODE]: 'Say new for a new game, end to end the game.',
   [states.PLAYMODE]: 'Say repeat to repeat the question, new to start a new game or end to end the game.'
 }
 
