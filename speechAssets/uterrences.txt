@@ -1,0 +1,12 @@
+AnswerIntent	{Capital}
+AnswerIntent	the answer is {Capital}
+
+PassIntent		I don't know
+PassIntent		pass
+
+EndIntent		end
+EndIntent		end the game
+
+NewIntent       new
+
+RepeatIntent	repeat
