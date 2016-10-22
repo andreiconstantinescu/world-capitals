@@ -1,13 +1,7 @@
 'use strict'
 
-const startGame = require('./startGame.js')
-const playGame = require('./playGame.js')
-const newSession = require('./newSession.js')
-const gameHelpers = require('./gameHelpers.js')
+const merge = require('lodash/merge')
+const stateHandlers = require('./stateHandlers')
+const helpers = require('./helpers')
 
-module.exports = {
-  newSession,
-  gameHelpers,
-  playGame,
-  startGame
-}
+module.exports = merge(stateHandlers, helpers)
