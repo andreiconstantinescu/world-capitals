@@ -39,10 +39,27 @@ const playGameState = Alexa.CreateStateHandler(skillStates.PLAYMODE, {
     this.emit('AskQuestion', toSay)
   },
 
-  Unhandled () {
-    const message = 'Say yes to start a new game, no to end the game or help to find out more information.'
+  RepeatIntent () {
+    this.emit('AskQuestion')
+  },
+
+  NewIntent () {
     this.handler.state = skillStates.STARTMODE
+    this.emitWithState('AMAZON.YesIntent')
+  },
+
+  EndIntent () {
+    this.handler.state = skillStates.STARTMODE
+    this.emitWithState('AMAZON.NoIntent')
+  },
+
+  ['AMAZON.HelpIntent'] () {
+    const message = 'Say repeat to repeat, new to start a new game or end to end the game.'
     this.emit(':ask', message, message)
+  },
+
+  Unhandled () {
+    this.emitWithState('AMAZON.HelpIntent')
   }
 })
 
