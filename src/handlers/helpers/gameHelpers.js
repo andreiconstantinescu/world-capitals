@@ -13,7 +13,9 @@ const GameHelpers = {
     if (currentQuestionNumber >= this.attributes.currentGame.roundSize) {
       this.emit('GameOver')
     } else {
-      this.emit(':ask', toSay, reprompt)
+      const correctAnswer = this.attributes.currentGame.items[currentQuestionNumber].capital.toLowerCase()
+      this.emit(':askWithCard', toSay, reprompt, toSay, correctAnswer)
+      // this.emit(':ask', toSay, reprompt)
     }
   },
 
