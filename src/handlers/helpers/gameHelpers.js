@@ -7,15 +7,15 @@ const GameHelpers = {
   AskQuestion (prompt) {
     const questions = this.attributes.currentGame.items
     const currentQuestionNumber = this.attributes.currentGame.currentQuestion
-    const toSay = `${prompt || ''} ${formQuestion(questions[currentQuestionNumber].country)}`
+    const currentCountry = questions[currentQuestionNumber].country
+    const toSay = `${prompt || ''} ${formQuestion(currentCountry)}`
     const reprompt = "Just say the capital to check, pass or i don't know to move on to the next one"
 
     if (currentQuestionNumber >= this.attributes.currentGame.roundSize) {
       this.emit('GameOver')
     } else {
       const correctAnswer = this.attributes.currentGame.items[currentQuestionNumber].capital.toLowerCase()
-      this.emit(':askWithCard', toSay, reprompt, toSay, correctAnswer)
-      // this.emit(':ask', toSay, reprompt)
+      this.emit(':askWithCard', toSay, reprompt, `Country: ${currentCountry}`, correctAnswer)
     }
   },
 
